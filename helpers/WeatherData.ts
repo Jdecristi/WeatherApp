@@ -32,18 +32,21 @@ export const getWeatherData = async (city: string, units: string) => {
 
     const getDateTime = (lat: number, lon: number) => {
         const dateTime = new Date()
-        const currentLocalTime = (dateTime.getUTCHours() * 60) + dateTime.getUTCMinutes() + (lon * 4);
+        const localTimeDifference = (Math.round(lon / 15) * 60);
+        const currentLocalTime = (dateTime.getUTCHours() * 60) + dateTime.getUTCMinutes() + localTimeDifference;
 
         const sunCalc = SunCalc.getTimes(dateTime, lat, lon);
-        let sunrise = (sunCalc.sunrise.getUTCHours() * 60) + sunCalc.sunrise.getUTCMinutes() + (lon * 4);
-        let sunset = (sunCalc.sunset.getUTCHours() * 60) + sunCalc.sunset.getUTCMinutes() + (lon * 4);
+        let sunrise = ((sunCalc.sunrise.getUTCHours() * 60) + sunCalc.sunrise.getUTCMinutes()) + localTimeDifference;
+        let sunset = ((sunCalc.sunset.getUTCHours() * 60) + sunCalc.sunset.getUTCMinutes()) + localTimeDifference;
 
-        if(sunrise >= 1440) sunrise = sunrise - 1440;
-        if(sunset >= 1440) sunset = sunset - 1440;
+        const reCalculateTime = (time: number) => {
+            if (time >= 1440) return time - 1440;
+            if (time < 0)  return time + 1440;
+            return time;
+        }
 
-        weatherData.day = (currentLocalTime >= sunrise && currentLocalTime <= sunset ) ? true : false;
+        weatherData.day = (currentLocalTime >= reCalculateTime(sunrise) && currentLocalTime <= reCalculateTime(sunset)) ? true : false;
         weatherData.date = dateTime.toLocaleDateString().toUpperCase();
-
     }
 
     const getlocation = async (city: string) => {
