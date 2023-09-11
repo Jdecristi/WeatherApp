@@ -1,50 +1,52 @@
-import React, { createRef, useEffect } from 'react';
+/* eslint-disable react/no-unknown-property */
+import React, { createRef, useEffect } from "react";
 
 export interface CloudType {
-    type: number;
-    color: string;
-    size: number;
-    position: {x: number, y: number};
-    zIndex: number;
+  type: number;
+  color: string;
+  size: number;
+  position: { x: number; y: number };
+  zIndex: number;
 }
 
 interface Props {
-    type: number;
-    color: string;
-    size: number;
-    position: {x: number; y: number}
-    zIndex: number;
+  type: number;
+  color: string;
+  size: number;
+  position: { x: number; y: number };
+  zIndex: number;
 }
-const Cloud: React.FC <Props> = (props) => {
-    const {type, color, size, position, zIndex} = props;
+const Cloud: React.FC<Props> = (props) => {
+  const { type, color, size, position, zIndex } = props;
 
-    const cloudRef = createRef<SVGSVGElement>();
+  const cloudRef = createRef<SVGSVGElement>();
 
-    const parallax = (e: MouseEvent) => {
-        const x = (e.pageX * zIndex) / -5000;
-        const y = (e.pageY * zIndex) / -5000;
-        
-        if (cloudRef.current) cloudRef.current.style.transform = `translate(${x}em, ${y}em)`;
+  const parallax = (e: MouseEvent) => {
+    const x = (e.pageX * zIndex) / -5000;
+    const y = (e.pageY * zIndex) / -5000;
+
+    if (cloudRef.current)
+      cloudRef.current.style.transform = `translate(${x}em, ${y}em)`;
+  };
+
+  useEffect(() => {
+    if (cloudRef.current) {
+      cloudRef.current.style.left = `${position.x}em`;
+      cloudRef.current.style.top = `${position.y}em`;
     }
 
-    useEffect(() => {
-        if (cloudRef.current) {
-            cloudRef.current.style.left = `${position.x}em`
-            cloudRef.current.style.top = `${position.y}em`
-        }
-    
-        window.addEventListener('mousemove', parallax);
+    window.addEventListener("mousemove", parallax);
 
-        return () => {
-            window.removeEventListener('mousemove', parallax);
-        }
-    },)
+    return () => {
+      window.removeEventListener("mousemove", parallax);
+    };
+  });
 
-    const clouds = [
-        {
-            viewBox: '0 0 333 187',
-            aspectRatio: 187 / 333,
-            path: `
+  const clouds = [
+    {
+      viewBox: "0 0 333 187",
+      aspectRatio: 187 / 333,
+      path: `
                 M134.358 0C109.796 0 85.3839 10.8135 68.0162 29.3833C57.0737 41.0828 49.0192 55.7714
                 44.5523 71.6055C33.8158 73.7725 23.6758 79.3753 15.9441 87.6419C5.86652 98.4168 0 113.557 0
                 128.795C0 144.033 5.86652 159.178 15.9441 169.953C26.0217 180.727 40.1863 187 54.4382 187H298.252C307.349
@@ -53,13 +55,13 @@ const Cloud: React.FC <Props> = (props) => {
                 78.1202 277.458 65.5779C263.949 51.1349 244.964 42.7252 225.861 42.7252C221.223 42.7252 216.595
                 43.2336 212.048 44.1909C208.72 38.8816 204.93 33.9059 200.7 29.3833C183.333 10.8135 158.92 0
                 134.358 0V0Z
-            `
-        },
+            `,
+    },
 
-        {
-            viewBox: '0 0 333 281',
-            aspectRatio: 281 / 333,
-            path: `
+    {
+      viewBox: "0 0 333 281",
+      aspectRatio: 281 / 333,
+      path: `
                 M68.0162 29.3833C85.3839 10.8135 109.796 0 134.358 0C158.92 0 183.333 10.8135 200.7 29.3833C204.93
                 33.9059 208.72 38.8816 212.048 44.1909C216.595 43.2337 221.223 42.7252 225.861 42.7252C244.964 42.7252
                 263.949 51.1349 277.458 65.5779C285.607 74.2913 291.699 85.1379 295.25 96.8572C303.42 99.6924 310.981
@@ -73,13 +75,13 @@ const Cloud: React.FC <Props> = (props) => {
                 134.301 0 131.152C0 130.803 0.00482503 130.454 0.0144263 130.105C0.00482179 129.668 0 129.232 0 128.795C0
                 113.557 5.86652 98.4168 15.9441 87.6419C23.6758 79.3753 33.8158 73.7725 44.5523 71.6055C49.0192 55.7714
                 57.0737 41.0828 68.0162 29.3833Z
-            `
-        },
+            `,
+    },
 
-        {
-            viewBox: '0 0 108 93',
-            aspectRatio: 93 / 108,
-            path: `
+    {
+      viewBox: "0 0 108 93",
+      aspectRatio: 93 / 108,
+      path: `
                 M16.1587 77.9754C20.5971 85.2696 27.7153 90.3465 35.503 91.7713C43.2908 93.196 51.6533 90.9512 58.2284
                 85.6719C59.8299 84.3862 61.3177 82.9215 62.6782 81.317C64.065 81.9049 65.503 82.3455 66.9736 82.6145C73.0307
                 83.7226 79.5341 81.9768 84.6481 77.8708C89.0891 74.305 92.4326 68.9957 94.0058 63.1319C96.875 63.6397 99.9492
@@ -91,13 +93,13 @@ const Cloud: React.FC <Props> = (props) => {
                 13.2695 16.2287 18.0138 14.7934 23.1281C11.3436 23.8281 8.08537 25.6377 5.60101 28.3078C3.06496 31.0335 1.35887
                 34.6239 0.738267 38.4171C0.567177 39.0616 0.424787 39.715 0.312708 40.3745C-0.564014 45.5333 0.424991 50.9992 3.00031
                 55.2316C4.97616 58.4787 7.86885 60.9637 11.1484 62.3201C11.6537 67.9398 13.3624 73.3798 16.1587 77.9754Z
-            `
-        },
+            `,
+    },
 
-        {
-            viewBox: '0 0 382 152',
-            aspectRatio: 152 / 382,
-            path: `
+    {
+      viewBox: "0 0 382 152",
+      aspectRatio: 152 / 382,
+      path: `
                 M78.0245 133.257C97.9479 144.836 125.953 151.578 154.129 151.578C182.305 151.578 210.309 144.836 230.233 133.257C235.085
                 130.437 239.432 127.335 243.25 124.024C248.466 124.621 253.775 124.938 259.096 124.938C281.01 124.938 302.789 119.695
                 318.285 110.689C331.741 102.869 340.307 92.2924 342.331 81.3043C352.701 81.2737 362.993 78.7856 370.327 74.5235C377.706
@@ -108,29 +110,28 @@ const Cloud: React.FC <Props> = (props) => {
                 36.7676 27.3957 40.3177 18.2902 45.6093C16.7101 46.5276 15.2203 47.4967 13.8255 48.51C8.46645 51.909 4.86181 55.7448
                 3.36115 59.6298C1.16604 63.3723 0 67.3171 0 71.2721C0 80.7733 6.72975 90.2133 18.2902 96.9317C27.1596 102.086 38.7916
                 105.58 51.108 106.931C56.2322 116.804 65.4719 125.962 78.0245 133.257Z
-            `
-        },
-    ]
-    
+            `,
+    },
+  ];
 
-    return (
-        <>
-            <svg className="cloud" viewBox={clouds[type].viewBox} ref={cloudRef}>
-                <path d={clouds[type].path} fill={color} />
-            </svg>
+  return (
+    <>
+      <svg className="cloud" viewBox={clouds[type].viewBox} ref={cloudRef}>
+        <path d={clouds[type].path} fill={color} />
+      </svg>
 
-            <style jsx>
-                {`
-                    .cloud {
-                        position: absolute;
-                        width: ${size}em;
-                        height: ${size * (clouds[type].aspectRatio)}em;
-                        transition: translate .5s ease-in-out;
-                        z-index: ${zIndex};
-                    }
-                `}
-            </style>
-        </>
-    )
-}
+      <style jsx>
+        {`
+          .cloud {
+            position: absolute;
+            width: ${size}em;
+            height: ${size * clouds[type].aspectRatio}em;
+            transition: translate 0.5s ease-in-out;
+            z-index: ${zIndex};
+          }
+        `}
+      </style>
+    </>
+  );
+};
 export default Cloud;

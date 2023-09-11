@@ -1,73 +1,57 @@
-import React, {useEffect, useState } from 'react';
+/* eslint-disable react/no-unknown-property */
+import React, { useEffect, useState } from "react";
 
 //Weather Data
-import weatherData from '../../helpers/WeatherData';
+import weatherData from "../../helpers/WeatherData";
+
+const unitSign = {
+  METRIC: "C",
+  IMPERIAL: "F",
+  KELVIN: "K",
+};
 
 const TemperatureTimer: React.FC = () => {
-    
-    const [newTemp, updateNewTermp] = useState<number>(0);
-    const [timer, updateTimer] = useState<number>(0);
-    const [unitSign, updateUnitSign] = useState<string>('F');
+  const [temp, setTemp] = useState<number>(0);
 
-    useEffect(() => {
-        let roundedTemp = Math.round(weatherData.temperature);
-        if (newTemp < roundedTemp) {
-            setTimeout(() =>{
-                if (newTemp > roundedTemp - 15) {
-                    updateTimer(timer + 15);
-                }
+  useEffect(() => {
+    const belowZero = weatherData.temperature < 0;
 
-                updateNewTermp(newTemp + 1);
-            }, timer);
-        }
-    }, [newTemp, timer]);
+    if (temp > Math.round(weatherData.temperature - 1)) return;
 
-    useEffect(() => {
-        switch (weatherData.units){
-            case 'METRIC':
-                updateUnitSign('C')
-            break;
-            case 'IMPERIAL':
-                updateUnitSign('F')
-            break;
-            case 'KELVIN':
-                updateUnitSign('K')
-            break;
-        }
-    })
+    setTimeout(() => {
+      belowZero ? setTemp(temp - 1) : setTemp(temp + 1);
+    }, 10);
+  }, [temp]);
 
-    return (
-        <>
-            <div className="container">
-                <h1>{newTemp}° </h1>
-                <h4>{unitSign}</h4>
-            </div>
-            <style jsx>
-                {`  
-                    .container {
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: start;
-                    }
-                    h1,
-                    h4
-                    {
-                        color: #${weatherData.day ? '333333' : 'EEEEEE'};
-                        font-weight: normal;
-                        font-family: roboto;
-                        margin: 0;
-                    }
-                    h1 {
-                        font-size: 5em;
-                    }
-                    h4 {
-                        margin-top: .5em;
-                        font-size: 1.5em;
-                    }
-                `}
-            </style>
-        </>
-    )
-
-}
+  return (
+    <>
+      <div className="container">
+        <h1>{temp}° </h1>
+        <h4>{unitSign[weatherData.units]}</h4>
+      </div>
+      <style jsx>
+        {`
+          .container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: start;
+          }
+          h1,
+          h4 {
+            color: #${weatherData.day ? "333333" : "EEEEEE"};
+            font-weight: normal;
+            margin: 0;
+          }
+          h1 {
+            font-size: 5em;
+          }
+          h4 {
+            margin-top: 0.5em;
+            font-size: 1.5em;
+          }
+        `}
+      </style>
+    </>
+  );
+};
 export default TemperatureTimer;
