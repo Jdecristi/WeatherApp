@@ -64,9 +64,11 @@ const Home: NextPage = () => {
           .container {
             width: 100vw;
             height: 100vh;
-            background-image: url("/images/background_images/${weatherData.day
-              ? "day"
-              : "night"}_background.jpeg");
+            background: radial-gradient(
+              100% 100% at 50% 100%,
+              ${weatherData.day ? "#fefee2" : "#C7A37F"},
+              ${weatherData.day ? "#8ff8fe" : "#300293 75%"}
+            );
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
